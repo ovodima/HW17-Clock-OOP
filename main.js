@@ -1,5 +1,7 @@
 const main = document.querySelector(".main");
-const time = document.querySelector(".time");
+const time1 = document.querySelector(".time-1");
+const time2 = document.querySelector(".time-2");
+const time3 = document.querySelector(".time-3");
 const interval = 250;
 
 let Clock = function () {
@@ -13,38 +15,74 @@ let Clock = function () {
     target.classList.toggle("full");
   });
 
-  this.render = function () {
-    let check = time.classList.contains("full");
+  this.getTime = function() {
+    let check = time1.classList.contains("full");
+    let result
     if (!check) {
-      Short.prototype = new Clock();
-      let short = new Short();
-      time.innerText = short.getTimeShort();
+      result = this.clock.toLocaleTimeString();
+      return result;
     } else {
-      Full.prototype = new Clock();
-      let full = new Full();
-      time.innerText = full.getTimeFull();
+      result = this.clock.toLocaleString();
+      return result;
     }
+  }
+
+  this.render = function () {
+    time1.innerText = this.getTime()
   };
 };
 
 function Full() {
-  this.getTimeFull = function () {
+  this.getTime = function () {
     if (this.hour < 10) this.hour = "0" + this.hour;
     if (this.minutes < 10) this.minutes = "0" + this.minutes;
     if (this.second < 10) this.second = "0" + this.second;
-    return `${this.hour}:${this.minutes}:${this.second}`;
+    let check = time2.classList.contains("full");
+    let result
+    if(check) {
+      result = `${this.hour}:${this.minutes}:${this.second}`
+      return result
+    } else {
+      return result = this.clock.toTimeString()
+    }
   };
+
+  this.render = function() {
+    time2.innerText = this.getTime()
+  }
 }
 
 function Short() {
-  this.getTimeShort = function () {
+  this.getTime = function () {
     if (this.hour < 10) this.hour = "0" + this.hour;
     if (this.minutes < 10) this.minutes = "0" + this.minutes;
-    return `${this.hour}:${this.minutes}`;
+    if (this.second < 10) this.second = "0" + this.second;
+    let check = time3.classList.contains("full");
+    let result
+
+    if(check) {
+      result = `${this.hour}:${this.minutes}`
+      return result
+    } else {
+      return result = this.clock.toLocaleString()
+    }
   };
+
+  this.render = function() {
+    time3.innerText = this.getTime()
+  }
 }
 
-let setTime = new Clock();
+console.log(new Clock())
+
 setInterval(() => {
-  setTime.render();
+  Short.prototype = new Clock()
+  Full.prototype = new Clock()
+  let clock = new Clock()
+  let full = new Full();
+  let short = new Short()
+
+  short.render()
+  clock.render()
+  full.render()
 }, interval);
